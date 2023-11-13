@@ -25,19 +25,19 @@ css = '''
 }
 '''
 
-botTemp = '''
+userTemp = '''
 <div class="chat-message bot">
     <div class="avatar">
-        <img src="assets\bot.png"">
+        <span>User:</span>
     </div>
     <div class="message">{{MSG}}</div>
 </div>
 '''
 
-userTemp = '''
+botTemp = '''
 <div class="chat-message user">
     <div class="avatar">
-        <img src="assets\bot.png">
+        <span>Bot:</span>
     </div>    
     <div class="message">{{MSG}}</div>
 </div>
