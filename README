@@ -1,0 +1,56 @@
+# Langchain Based LLM Project
+
+## Overview
+
+This is a simple Langchain-based LLM project that allows users to upload multiple documents and ask questions through a web UI. The LLM has access to the knowledge contained within the uploaded documents and can provide answers to user's questions. This project can be improved in the future by creating a more user-friendly interface and enhancing its academic capabilities.
+
+## Features
+
+The following features are currently available in this project:
+
+- Users can upload multiple PDF documents through the web UI.
+- Users can ask questions related to the content of the uploaded documents.
+- The LLM uses natural language processing and machine learning algorithms to understand and interpret user questions.
+- The LLM provides answers to user questions based on the information contained within the uploaded documents.
+- The LLM retains knowledge of past messages and documents to provide more accurate responses.
+
+## Installation
+
+To install this project, follow these steps:
+
+1. Clone the repository using 
+    
+    `git clone https://github.com/abishek-ctrl/pdf-chat-langchain.git`
+2. Install all dependencies by running 
+            
+    `pip install -r requirements.txt`
+3. Add your OpenAI API key by creating a .env file.
+            
+        OPENAI_API_KEY="your_openai_api_key"
+3. Run the application using `python app.py`
+
+## Usage
+
+Once the project is installed, users can start using it by following these steps:
+
+1. Upload one or more PDF documents using the "Upload" button on the web UI.
+2. Ask a question related to the content of the uploaded documents using the "Ask Question" button on the web UI.
+3. The LLM will process the question and provide an answer based on the information contained within the uploaded documents.
+
+## Future Improvements
+
+We plan to improve this project in the future by implementing the following features:
+
+- A more user-friendly interface to make it easier for users to interact with the LLM.
+- Deploy it to the real world for public use.
+- Enhanced academic capabilities to support students and researchers in their studies and work.
+- Integration with additional document formats to expand the types of documents that can be used with the LLM.
+- Advanced language models to improve the accuracy and comprehensiveness of the LLM's responses.
+
+## Contributing
+
+If you would like to contribute to this project, please fork the repository and submit pull requests with your proposed changes. We welcome any contributions that align with our goals of improving the functionality and usability of the Langchain Based LLM Project.
+
+## License
+
+This project is licensed under the MIT License.
