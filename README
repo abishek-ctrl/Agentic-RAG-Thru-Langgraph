@@ -37,6 +37,10 @@ Once the project is installed, users can start using it by following these steps
 2. Ask a question related to the content of the uploaded documents using the "Ask Question" button on the web UI.
 3. The LLM will process the question and provide an answer based on the information contained within the uploaded documents.
 
+#### UPDATE(20-01-2024)
+
+Added Streamlit URL for access : https://lang-chat.streamlit.app
+
 ## Future Improvements
 
 We plan to improve this project in the future by implementing the following features:
@@ -46,10 +50,6 @@ We plan to improve this project in the future by implementing the following feat
 - Enhanced academic capabilities to support students and researchers in their studies and work.
 - Integration with additional document formats to expand the types of documents that can be used with the LLM.
 - Advanced language models to improve the accuracy and comprehensiveness of the LLM's responses.
-
-## Contributing
-
-If you would like to contribute to this project, please fork the repository and submit pull requests with your proposed changes. We welcome any contributions that align with our goals of improving the functionality and usability of the Langchain Based LLM Project.
 
 ## License
 
