@@ -69,7 +69,7 @@ def conv_chain(vector_store):
 def main():
     # Initialize session state
     start()
-    st.title("Multi-PDF ChatBot using Mistral-7B-Instruct :books:")
+    st.title("Multi-PDF ChatBot:books:")
     # Initialize Streamlit
     st.sidebar.title("Document Processing")
     uploaded_files = st.sidebar.file_uploader("Upload files", accept_multiple_files=True)
