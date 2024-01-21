@@ -1,6 +1,5 @@
 import streamlit as st
 from dotenv import load_dotenv
-from PyPDF2 import PdfReader
 from streamlit_chat import message
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.llms import LlamaCpp
