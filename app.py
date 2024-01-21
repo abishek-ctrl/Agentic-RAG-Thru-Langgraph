@@ -1,12 +1,12 @@
 import streamlit as st
 from dotenv import load_dotenv
 from streamlit_chat import message
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.llms import LlamaCpp
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.llms import LlamaCpp
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 from langchain.memory import ConversationBufferMemory
-from langchain.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import PyPDFLoader
 from htmltemp import css, botTemp, userTemp
 import os
 import tempfile
