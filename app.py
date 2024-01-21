@@ -1,83 +1,109 @@
 import streamlit as st
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
-from langchain.chat_models import ChatOpenAI
-from langchain.text_splitter import CharacterTextSplitter
+from streamlit_chat import message
+from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.llms import LlamaCpp
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import FAISS
-from langchain.embeddings import OpenAIEmbeddings
 from langchain.memory import ConversationBufferMemory
-from langchain.chains import ConversationalRetrievalChain
+from langchain.document_loaders import PyPDFLoader
 from htmltemp import css, botTemp, userTemp
+import os
+import tempfile
 
-def get_text(docs):
-    text= ""
-    for pdf in docs:
-        pdf_reader=PdfReader(pdf)
-        for page in pdf_reader.pages:
-            text+=page.extract_text()
-    return text
+def start():
+    if 'history' not in st.session_state:
+        st.session_state['history'] = []
 
-def get_chunks(rawtxt):
-    splitter=CharacterTextSplitter(
-        separator="\n",
-        chunk_size=1000,
-        chunk_overlap=200,
-        length_function=len
-    )
-    chunks=splitter.split_text(rawtxt)
-    return chunks
+    if 'generated' not in st.session_state:
+        st.session_state['generated'] = ["Hello! Ask me anything about 🤗"]
 
-def get_vectorstore(chunks):
-    embeddings=OpenAIEmbeddings()
-    vectors=FAISS.from_texts(texts=chunks,embedding=embeddings)
-    return vectors
+    if 'past' not in st.session_state:
+        st.session_state['past'] = ["Hey! 👋"]
 
-def get_convo_chain(vector):
-    llm=ChatOpenAI()
-    memory=ConversationBufferMemory(memory_key='chat_history',return_messages=True)
-    convo_chain= ConversationalRetrievalChain.from_llm(
-        llm=llm,
-        retriever=vector.as_retriever(),
-        memory=memory
-    )
-    return convo_chain
+def conversation_chat(query, chain, history):
+    result = chain({"question": query, "chat_history": history})
+    history.append((query, result["answer"]))
+    return result["answer"]
 
-def handle_inp(inp):
-    response=st.session_state.conversation({'question':inp})
-    st.session_state.chat_history= response['chat_history']
+def display_hist(chain):
+    reply_container = st.container()
+    container = st.container()
 
-    for i, msg in enumerate(st.session_state.chat_history):
-        if i %2==0:
-            st.write(userTemp.replace("{{MSG}}",msg.content),unsafe_allow_html=True)
-        else:
-            st.write(botTemp.replace("{{MSG}}",msg.content),unsafe_allow_html=True)
+    with container:
+        with st.form(key='my_form', clear_on_submit=True):
+            user_input = st.text_input("Question:", placeholder="Ask about your PDF", key='input')
+            submit_button = st.form_submit_button(label='Send')
 
+        if submit_button and user_input:
+            with st.spinner('Generating response...'):
+                output = conversation_chat(user_input, chain, st.session_state['history'])
+
+            st.session_state['past'].append(user_input)
+            st.session_state['generated'].append(output)
+
+    if st.session_state['generated']:
+        with reply_container:
+            for i in range(len(st.session_state['generated'])):
+                message(st.session_state["past"][i], is_user=True, key=str(i) + '_user', avatar_style="thumbs")
+                message(st.session_state["generated"][i], key=str(i), avatar_style="fun-emoji")
+
+def conv_chain(vector_store):
+    # Create llm
+    llm = LlamaCpp(
+    streaming = True,
+    model_path="mistral-7b-instruct-v0.1.Q4_K_M.gguf",
+    temperature=0.75,
+    top_p=1, 
+    verbose=True,
+    n_ctx=4096
+)
+    
+    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+
+    chain = ConversationalRetrievalChain.from_llm(llm=llm, chain_type='stuff',
+                                                 retriever=vector_store.as_retriever(search_kwargs={"k": 2}),
+                                                 memory=memory)
+    return chain
 
 def main():
-    load_dotenv()
-    st.set_page_config(page_title="PDF Chat", page_icon=":books:")
+    # Initialize session state
+    start()
+    st.title("Multi-PDF ChatBot using Mistral-7B-Instruct :books:")
+    # Initialize Streamlit
+    st.sidebar.title("Document Processing")
+    uploaded_files = st.sidebar.file_uploader("Upload files", accept_multiple_files=True)
 
-    st.write(css,unsafe_allow_html=True)
 
-    if "conversation" not in st.session_state:
-        st.session_state.conversation=None
-    if "chat_history" not in st.session_state:
-        st.session_state.chat_history=None
+    if uploaded_files:
+        text = []
+        for file in uploaded_files:
+            file_extension = os.path.splitext(file.name)[1]
+            with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+                temp_file.write(file.read())
+                temp_file_path = temp_file.name
 
-    st.header("PDF Chat :books:")
-    inp= st.text_input("Ask a question about the PDF:")
-    if inp:
-        handle_inp(inp)
+            loader = None
+            if file_extension == ".pdf":
+                loader = PyPDFLoader(temp_file_path)
 
-    with st.sidebar:
-        st.subheader("Your PDFs")
-        docs=st.file_uploader("Upload your PDFs here",accept_multiple_files=True)
-        if st.button("Upload"):
-            with st.spinner("Processing"):
-                rawtxt=get_text(docs)
-                chunks=get_chunks(rawtxt)
-                vectors=get_vectorstore(chunks)
-                st.session_state.conversation=get_convo_chain(vectors)
+            if loader:
+                text.extend(loader.load())
+                os.remove(temp_file_path)
+
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=20)
+
+        text_chunks = text_splitter.split_documents(text)
+
+        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2", 
+                                           model_kwargs={'device': 'cpu'})
+
+        vector_store = FAISS.from_documents(text_chunks, embedding=embeddings)
+
+        chain = conv_chain(vector_store)
+
+        display_hist(chain)
 
 if __name__ == "__main__":
     main()
