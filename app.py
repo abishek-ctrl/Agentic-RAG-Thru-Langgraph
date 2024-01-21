@@ -52,7 +52,7 @@ def conv_chain(vector_store):
     # Create llm
     llm = LlamaCpp(
     streaming = True,
-    model_path="mistral-7b-instruct-v0.1.Q4_K_M.gguf",
+    model_path="TheBloke/Mistral-7B-Instruct-v0.2-GGUF/mistral-7b-instruct-v0.2.Q4_0.gguf",
     temperature=0.75,
     top_p=1, 
     verbose=True,
