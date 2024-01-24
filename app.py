@@ -47,7 +47,7 @@ def handle_inp(inp):
     st.session_state.chat_history= response['chat_history']
 
     for i, msg in enumerate(st.session_state.chat_history):
-        if i %2==0:
+        if i%2==0:
             st.write(userTemp.replace("{{MSG}}",msg.content),unsafe_allow_html=True)
         else:
             st.write(botTemp.replace("{{MSG}}",msg.content),unsafe_allow_html=True)
