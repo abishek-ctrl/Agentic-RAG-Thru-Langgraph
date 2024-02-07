@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 from langchain_mistralai.chat_models import ChatMistralAI
@@ -28,7 +29,8 @@ def get_chunks(rawtxt):
     return chunks
 
 def get_vectorstore(chunks):
-    embeddings=OpenAIEmbeddings()
+    openai_api_key = os.environ.get('OPENAI_API_KEY')
+    embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key) 
     vectors=FAISS.from_texts(texts=chunks,embedding=embeddings)
     return vectors
 
