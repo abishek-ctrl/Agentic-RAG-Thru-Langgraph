@@ -1,7 +1,7 @@
 import streamlit as st
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
-from langchain.chat_models import ChatOpenAI
+from langchain_mistralai.chat_models import ChatMistralAI
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import FAISS
 from langchain.embeddings import OpenAIEmbeddings
@@ -33,9 +33,9 @@ def get_vectorstore(chunks):
     return vectors
 
 def get_convo_chain(vector):
-    llm=ChatOpenAI()
-    memory=ConversationBufferMemory(memory_key='chat_history',return_messages=True)
-    convo_chain= ConversationalRetrievalChain.from_llm(
+    llm = ChatMistralAI()  # Use ChatMistralAI instead of ChatOpenAI
+    memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
+    convo_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
         retriever=vector.as_retriever(),
         memory=memory
