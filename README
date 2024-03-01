@@ -1,10 +1,10 @@
-# Langchain Based LLM Project
+#Langchain Based LLM Project
 
-## Overview
+##Overview
 
 This is a simple Langchain-based LLM project that allows users to upload multiple documents and ask questions through a web UI. The LLM has access to the knowledge contained within the uploaded documents and can provide answers to user's questions. This project can be improved in the future by creating a more user-friendly interface and enhancing its academic capabilities.
 
-## Features
+##Features
 
 The following features are currently available in this project:
 
@@ -14,7 +14,7 @@ The following features are currently available in this project:
 - The LLM provides answers to user questions based on the information contained within the uploaded documents.
 - The LLM retains knowledge of past messages and documents to provide more accurate responses.
 
-## Installation
+##Installation
 
 To install this project, follow these steps:
 
@@ -29,7 +29,7 @@ To install this project, follow these steps:
         OPENAI_API_KEY="your_openai_api_key"
 3. Run the application using `python app.py`
 
-# Usage
+#Usage
 
 Once the project is installed, users can start using it by following these steps:
 
@@ -37,13 +37,13 @@ Once the project is installed, users can start using it by following these steps
 2. Ask a question related to the content of the uploaded documents using the "Ask Question" button on the web UI.
 3. The LLM will process the question and provide an answer based on the information contained within the uploaded documents.
 
-### Update (2024-01-20)
+###Update (2024-01-20)
 
 Added Streamlit URL for access: [https://lang-chat.streamlit.app](https://lang-chat.streamlit.app)
 
-# Future Improvements
+#Future Improvements
 
-We plan to improve this project in the future by implementing the following features:
+I plan to improve this project in the future by implementing the following features:
 
 - A more user-friendly interface to make it easier for users to interact with the LLM.
 - Deployment to the real world for public use.
