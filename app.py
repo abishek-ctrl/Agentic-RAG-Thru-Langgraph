@@ -1,7 +1,5 @@
 import os
 import streamlit as st
-import getpass
-from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 from langchain_together import Together
 from langchain_nvidia_ai_endpoints import NVIDIAEmbeddings
@@ -11,8 +9,6 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 
 from htmltemp import css, botTemp, userTemp
-
-load_dotenv()
 
 def get_text(docs):
     text = ""
@@ -33,15 +29,30 @@ def get_chunks(rawtxt):
     return chunks
 
 def get_vectorstore(chunks):
-    embeddings = NVIDIAEmbeddings(model="NV-Embed-QA")
+    # Get the NVIDIA API key from the environment
+    nvidia_api_key = os.getenv("NVIDIA_API_KEY")
+    if not nvidia_api_key:
+        st.error("NVIDIA API key not found. Please set the NVIDIA_API_KEY environment variable.")
+        return None
+
+    # Use the NVIDIAEmbeddings with the API key
+    embeddings = NVIDIAEmbeddings(model="NV-Embed-QA", api_key=nvidia_api_key)
     vectors = FAISS.from_texts(chunks, embedding=embeddings)
     return vectors
 
 def get_convo_chain(vector):
+    # Get the Together API key from the environment
+    together_api_key = os.getenv("TOGETHER_API_KEY")
+    if not together_api_key:
+        st.error("Together API key not found. Please set the TOGETHER_API_KEY environment variable.")
+        return None
+
+    # Use the Together LLM with the API key
     llm = Together(
         model="meta-llama/Meta-Llama-3-8B-Instruct-Turbo",
         temperature=0.7,
-        max_tokens=100
+        max_tokens=100,
+        api_key=together_api_key
     )
 
     memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
@@ -63,7 +74,6 @@ def handle_inp(inp):
     st.session_state.input = ""
 
 def main():
-    load_dotenv()
     st.set_page_config(page_title="PDF Chat", page_icon=":books:")
 
     st.write(css, unsafe_allow_html=True)
@@ -77,8 +87,6 @@ def main():
 
     st.header("PDF Chat :books:")
     inp = st.text_input("Ask a question about the PDF:", value=st.session_state.input)
-    if inp:
-        handle_inp(inp)
 
     with st.sidebar:
         st.subheader("Your PDFs")
@@ -88,8 +96,12 @@ def main():
             with st.spinner("Processing"):
                 rawtxt = get_text(docs)
                 chunks = get_chunks(rawtxt)
+
+                # Create vectorstore using NVIDIA API
                 vectors = get_vectorstore(chunks)
-                st.session_state.conversation = get_convo_chain(vectors)
+                if vectors:
+                    # Create conversation chain using Together API
+                    st.session_state.conversation = get_convo_chain(vectors)
 
 if __name__ == "__main__":
     main()
