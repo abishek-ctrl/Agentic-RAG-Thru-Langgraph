@@ -1,0 +1,156 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+/* Navigation Bar */
+nav {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+nav h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+/* Main Content Layout */
+.main-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 20px auto;
+    gap: 20px;
+}
+
+/* Upload Section (Left) */
+.upload-section {
+    flex: 1;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.upload-section h2 {
+    margin-top: 0;
+}
+
+.upload-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.upload-section input[type="file"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.upload-section button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.upload-section button:hover {
+    background-color: #0056b3;
+}
+
+#uploadStatus {
+    margin-top: 10px;
+    color: #333;
+}
+
+/* Chat Section (Center) */
+.chat-section {
+    flex: 2;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-section h2 {
+    margin-top: 0;
+}
+
+#chatWindow {
+    flex: 1;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+}
+
+.chat-message {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.chat-message.user {
+    justify-content: flex-start;
+}
+
+.chat-message.bot {
+    justify-content: flex-end;
+}
+
+.chat-message .message {
+    max-width: 70%;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.chat-message.user .message {
+    background-color: #007bff;
+    color: white;
+}
+
+.chat-message.bot .message {
+    background-color: #e9ecef;
+    color: #333;
+}
+
+#queryForm {
+    display: flex;
+    gap: 10px;
+}
+
+#queryForm input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#queryForm button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#queryForm button:hover {
+    background-color: #0056b3;
+}

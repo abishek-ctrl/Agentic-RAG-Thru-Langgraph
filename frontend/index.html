@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Query System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="nav-container">
+            <h1>Document Query System</h1>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Document Upload Section (Left) -->
+        <div class="upload-section">
+            <h2>Upload Documents</h2>
+            <form id="uploadForm">
+                <input type="file" id="files" name="files" multiple accept=".pdf,.docx">
+                <button type="submit">Upload</button>
+            </form>
+            <p id="uploadStatus"></p>
+        </div>
+
+        <!-- Chat Section (Center) -->
+        <div class="chat-section">
+            <h2>Chat</h2>
+            <div id="chatWindow">
+                <!-- Chat messages will be dynamically added here -->
+            </div>
+            <form id="queryForm">
+                <input type="text" id="query" name="query" placeholder="Enter your query" required>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
